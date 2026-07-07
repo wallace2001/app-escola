@@ -21,9 +21,7 @@ export function ClassCard({ schoolClass, onEdit, onDelete }: ClassCardProps) {
     <Card className="gap-2">
       <HStack className="items-center justify-between gap-3">
         <VStack className="flex-1 gap-2">
-          <Heading size="xs" numberOfLines={1}>
-            {schoolClass.name}
-          </Heading>
+          <Heading size="xs">{schoolClass.name}</Heading>
           <HStack className="flex-wrap items-center gap-2">
             <ShiftBadge shift={schoolClass.shift} />
             <Text size="xs" className="text-muted-foreground">

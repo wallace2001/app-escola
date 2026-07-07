@@ -27,12 +27,10 @@ export function SchoolCard({ school, onPress }: SchoolCardProps) {
       <Card className="gap-3">
         <HStack className="items-center justify-between gap-3">
           <VStack className="flex-1 gap-1">
-            <Heading size="sm" numberOfLines={1}>
-              {school.name}
-            </Heading>
+            <Heading size="sm">{school.name}</Heading>
             <HStack className="items-center gap-1.5">
               <Icon as={MapPin} size="sm" className="text-muted-foreground" />
-              <Text size="sm" numberOfLines={1} className="flex-1 text-muted-foreground">
+              <Text size="sm" className="flex-1 text-muted-foreground">
                 {school.address}
               </Text>
             </HStack>
