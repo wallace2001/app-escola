@@ -7,7 +7,7 @@ import { schoolClassSchema } from '@/domain/school-class';
 import { API_URL } from '@/lib/http';
 
 import type { DbSnapshot } from './persistence';
-import { loadSnapshot, schedulePersist } from './persistence';
+import { clearSnapshot, loadSnapshot, schedulePersist } from './persistence';
 import { seeds } from './seeds';
 
 type MockServer = ReturnType<typeof createServer>;
@@ -194,7 +194,6 @@ export async function startMockServer(): Promise<MockServer> {
         return new Response(204);
       });
 
-      // requisições fora da API mock (Metro, source maps, etc.) seguem normalmente
       this.passthrough((request) => !request.url.startsWith(API_URL));
     },
   });
@@ -203,4 +202,17 @@ export async function startMockServer(): Promise<MockServer> {
 
   globalThis.__mockApiServer = server;
   return server;
+}
+
+export async function resetMockData() {
+  await clearSnapshot();
+
+  const server = globalThis.__mockApiServer;
+  if (!server) {
+    await startMockServer();
+    return;
+  }
+
+  server.db.emptyData();
+  server.db.loadData(seeds);
 }

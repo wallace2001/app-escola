@@ -1,17 +1,22 @@
 import { FlashList } from '@shopify/flash-list';
 import { useRouter } from 'expo-router';
-import { Plus, School } from 'lucide-react-native';
+import { Plus, School, Users } from 'lucide-react-native';
 import { RefreshControl, useWindowDimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { DrawerToggle } from '@/components/drawer-toggle';
 import { EmptyState } from '@/components/empty-state';
 import { ErrorState } from '@/components/error-state';
 import { LoadingState } from '@/components/loading-state';
 import { SearchField } from '@/components/search-field';
+import { StatCard } from '@/components/stat-card';
 import { Box } from '@/components/ui/box';
 import { Button, ButtonIcon, ButtonText } from '@/components/ui/button';
 import { Fab, FabIcon, FabLabel } from '@/components/ui/fab';
+import { Heading } from '@/components/ui/heading';
+import { HStack } from '@/components/ui/hstack';
 import { Text } from '@/components/ui/text';
+import { VStack } from '@/components/ui/vstack';
 import { SchoolCard } from '@/features/schools/components/school-card';
 import { useSchools } from '@/features/schools/hooks/use-schools';
 import { useDebouncedValue } from '@/hooks/use-debounced-value';
@@ -35,15 +40,28 @@ export default function SchoolsScreen() {
   const { refreshing, onRefresh } = usePullToRefresh(refetch);
   const numColumns = width >= 768 ? 2 : 1;
 
+  const totalClasses = schools.reduce((total, school) => total + school.classesCount, 0);
+  const isSearching = debouncedSearch.length > 0;
+
   return (
     <Box className="flex-1 bg-background">
-      <Box className="px-4 pb-2 pt-3">
+      <VStack className="gap-4 px-4 pb-3" style={{ paddingTop: insets.top + 12 }}>
+        <HStack className="items-center gap-3">
+          <DrawerToggle />
+          <VStack className="flex-1">
+            <Text size="xs" className="uppercase tracking-wide text-muted-foreground">
+              Rede municipal
+            </Text>
+            <Heading size="xl">Escolas públicas</Heading>
+          </VStack>
+        </HStack>
+
         <SearchField
           value={search}
           onChangeText={setSearch}
           placeholder="Buscar por nome ou endereço"
         />
-      </Box>
+      </VStack>
 
       {isPending ? (
         <LoadingState label="Carregando escolas..." />
@@ -62,19 +80,29 @@ export default function SchoolsScreen() {
           )}
           contentContainerStyle={{
             paddingHorizontal: 10,
-            paddingTop: 8,
+            paddingTop: 4,
             paddingBottom: insets.bottom + 96,
           }}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
           ListHeaderComponent={
-            schools.length > 0 ? (
-              <Text size="xs" className="mb-3 px-1.5 uppercase text-muted-foreground">
-                {pluralize(schools.length, 'escola encontrada', 'escolas encontradas')}
-              </Text>
-            ) : null
+            <VStack className="gap-3 px-1.5 pb-2">
+              {!isSearching && schools.length > 0 ? (
+                <HStack className="gap-3">
+                  <StatCard icon={School} value={schools.length} label="escolas" />
+                  <StatCard icon={Users} value={totalClasses} label="turmas" />
+                </HStack>
+              ) : null}
+              {schools.length > 0 ? (
+                <Text size="xs" className="uppercase text-muted-foreground">
+                  {isSearching
+                    ? pluralize(schools.length, 'resultado', 'resultados')
+                    : pluralize(schools.length, 'escola cadastrada', 'escolas cadastradas')}
+                </Text>
+              ) : null}
+            </VStack>
           }
           ListEmptyComponent={
-            debouncedSearch ? (
+            isSearching ? (
               <EmptyState
                 icon={School}
                 title="Nenhuma escola encontrada"

@@ -2,8 +2,6 @@ import { z } from 'zod';
 
 import { schoolClassSchema, type SchoolClassInput } from '@/domain/school-class';
 
-// no formulário o ano é digitado como texto; a conversão para número
-// acontece no submit, depois de validado o formato
 export const classFormSchema = schoolClassSchema.extend({
   year: z
     .string('Informe o ano letivo')

@@ -21,7 +21,6 @@ export async function loadSnapshot(): Promise<DbSnapshot | null> {
     const parsed: unknown = JSON.parse(raw);
     return isValidSnapshot(parsed) ? parsed : null;
   } catch {
-    // snapshot ilegível: descarta e deixa o servidor subir com os seeds
     return null;
   }
 }
@@ -31,8 +30,11 @@ let persistTimer: ReturnType<typeof setTimeout> | undefined;
 export function schedulePersist(dump: () => DbSnapshot) {
   clearTimeout(persistTimer);
   persistTimer = setTimeout(() => {
-    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(dump())).catch(() => {
-      // sem storage o app continua funcionando, apenas não persiste entre sessões
-    });
+    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(dump())).catch(() => {});
   }, 250);
+}
+
+export async function clearSnapshot() {
+  clearTimeout(persistTimer);
+  await AsyncStorage.removeItem(STORAGE_KEY).catch(() => {});
 }

@@ -30,9 +30,7 @@ export default function RootLayout() {
     let isMounted = true;
 
     startMockServer()
-      .catch(() => {
-        // se o mock não subir, as telas mostram o estado de erro com retry
-      })
+      .catch(() => {})
       .finally(() => {
         if (isMounted) setIsApiReady(true);
         SplashScreen.hideAsync();
@@ -53,7 +51,7 @@ export default function RootLayout() {
             <QueryClientProvider client={queryClient}>
               <StatusBar style="auto" />
               <Stack>
-                <Stack.Screen name="index" options={{ title: 'Escolas' }} />
+                <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
                 <Stack.Screen
                   name="schools/new"
                   options={{ title: 'Nova escola', presentation: 'modal' }}

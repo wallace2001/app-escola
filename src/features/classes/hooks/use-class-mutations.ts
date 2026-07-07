@@ -4,8 +4,6 @@ import type { SchoolClassInput } from '@/domain/school-class';
 import { classKeys, schoolKeys } from '@/lib/query-keys';
 import { classesRepository } from '@/repositories/classes-repository';
 
-// o total de turmas aparece na listagem e no detalhe da escola,
-// então mutações de turma também invalidam os dados de escola
 function useInvalidateClassData() {
   const queryClient = useQueryClient();
 
