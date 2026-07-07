@@ -28,6 +28,7 @@ import { useSchool } from '@/features/schools/hooks/use-schools';
 import { useDeleteSchool } from '@/features/schools/hooks/use-school-mutations';
 import { useAppToast } from '@/hooks/use-app-toast';
 import { useDebouncedValue } from '@/hooks/use-debounced-value';
+import { usePullToRefresh } from '@/hooks/use-pull-to-refresh';
 import { pluralize } from '@/lib/format';
 import { getErrorMessage } from '@/lib/http';
 
@@ -52,6 +53,10 @@ export default function SchoolDetailScreen() {
 
   const classesQuery = useClasses(id, { search: debouncedClassSearch, shift: shiftFilter });
   const classes = classesQuery.data ?? [];
+
+  const { refreshing, onRefresh } = usePullToRefresh(() =>
+    Promise.all([schoolQuery.refetch(), classesQuery.refetch()]),
+  );
 
   const deleteSchool = useDeleteSchool();
   const deleteClass = useDeleteClass(id);
@@ -148,15 +153,7 @@ export default function SchoolDetailScreen() {
           </Box>
         )}
         contentContainerStyle={{ paddingBottom: insets.bottom + 96 }}
-        refreshControl={
-          <RefreshControl
-            refreshing={classesQuery.isRefetching}
-            onRefresh={() => {
-              schoolQuery.refetch();
-              classesQuery.refetch();
-            }}
-          />
-        }
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         ListHeaderComponent={
           <VStack className="gap-4 p-4">
             <Card className="gap-3">

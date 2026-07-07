@@ -15,6 +15,7 @@ import { Text } from '@/components/ui/text';
 import { SchoolCard } from '@/features/schools/components/school-card';
 import { useSchools } from '@/features/schools/hooks/use-schools';
 import { useDebouncedValue } from '@/hooks/use-debounced-value';
+import { usePullToRefresh } from '@/hooks/use-pull-to-refresh';
 import { pluralize } from '@/lib/format';
 import { getErrorMessage } from '@/lib/http';
 import { useSchoolFilters } from '@/stores/school-filters';
@@ -28,9 +29,10 @@ export default function SchoolsScreen() {
   const setSearch = useSchoolFilters((state) => state.setSearch);
   const debouncedSearch = useDebouncedValue(search.trim());
 
-  const { data, isPending, isError, error, refetch, isRefetching } = useSchools(debouncedSearch);
+  const { data, isPending, isError, error, refetch } = useSchools(debouncedSearch);
   const schools = data ?? [];
 
+  const { refreshing, onRefresh } = usePullToRefresh(refetch);
   const numColumns = width >= 768 ? 2 : 1;
 
   return (
@@ -63,7 +65,7 @@ export default function SchoolsScreen() {
             paddingTop: 8,
             paddingBottom: insets.bottom + 96,
           }}
-          refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={() => refetch()} />}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
           ListHeaderComponent={
             schools.length > 0 ? (
               <Text size="xs" className="mb-3 px-1.5 uppercase text-muted-foreground">
