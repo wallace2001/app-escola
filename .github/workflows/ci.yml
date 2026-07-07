@@ -8,6 +8,11 @@ on:
 jobs:
   quality:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        check: [typecheck, lint, test]
+    name: ${{ matrix.check }}
     steps:
       - uses: actions/checkout@v4
 
@@ -18,11 +23,4 @@ jobs:
 
       - run: npm ci
 
-      - name: Typecheck
-        run: npm run typecheck
-
-      - name: Lint
-        run: npm run lint
-
-      - name: Test
-        run: npm test
+      - run: npm run ${{ matrix.check }}
