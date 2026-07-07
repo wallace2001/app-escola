@@ -6,7 +6,7 @@ import { schoolSchema } from '@/domain/school';
 import { schoolClassSchema } from '@/domain/school-class';
 import { API_URL } from '@/lib/config';
 
-import { clearSnapshot, loadSnapshot, schedulePersist } from './persistence';
+import { clearSnapshot, loadSnapshot, persistSnapshot } from './persistence';
 import { seeds } from './seeds';
 
 type MockServer = ReturnType<typeof createServer>;
@@ -58,7 +58,7 @@ export async function startMockServer(): Promise<MockServer> {
       this.timing = 350;
 
       const persist = () =>
-        schedulePersist(() => ({
+        persistSnapshot(() => ({
           schools: [...server.db.schools],
           classes: [...server.db.classes],
         }));

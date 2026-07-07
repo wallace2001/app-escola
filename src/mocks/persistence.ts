@@ -25,16 +25,18 @@ export async function loadSnapshot(): Promise<DbSnapshot | null> {
   }
 }
 
-let persistTimer: ReturnType<typeof setTimeout> | undefined;
-
-export function schedulePersist(dump: () => DbSnapshot) {
-  clearTimeout(persistTimer);
-  persistTimer = setTimeout(() => {
-    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(dump())).catch(() => {});
-  }, 250);
+export function persistSnapshot(dump: () => DbSnapshot) {
+  // Grava na hora: um debounce aqui perderia a escrita se o app recarregasse
+  // logo após uma mutação (ex.: excluir uma escola e recarregar em seguida).
+  let raw: string;
+  try {
+    raw = JSON.stringify(dump());
+  } catch {
+    return;
+  }
+  AsyncStorage.setItem(STORAGE_KEY, raw).catch(() => {});
 }
 
 export async function clearSnapshot() {
-  clearTimeout(persistTimer);
   await AsyncStorage.removeItem(STORAGE_KEY).catch(() => {});
 }
