@@ -12,7 +12,6 @@ import { SearchField } from '@/components/search-field';
 import { StatCard } from '@/components/stat-card';
 import { Box } from '@/components/ui/box';
 import { Button, ButtonIcon, ButtonText } from '@/components/ui/button';
-import { Fab, FabIcon, FabLabel } from '@/components/ui/fab';
 import { Heading } from '@/components/ui/heading';
 import { HStack } from '@/components/ui/hstack';
 import { Text } from '@/components/ui/text';
@@ -124,17 +123,6 @@ export default function SchoolsScreen() {
           }
         />
       )}
-
-      <Fab
-        size="lg"
-        placement="bottom right"
-        onPress={() => router.push('/schools/new')}
-        style={{ marginBottom: insets.bottom }}
-        accessibilityLabel="Cadastrar nova escola"
-      >
-        <FabIcon as={Plus} />
-        <FabLabel>Nova escola</FabLabel>
-      </Fab>
     </Box>
   );
 }
