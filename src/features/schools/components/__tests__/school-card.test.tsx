@@ -1,4 +1,4 @@
-import { render, screen, userEvent } from '@testing-library/react-native';
+import { fireEvent, render, screen } from '@testing-library/react-native';
 
 import type { School } from '@/domain/school';
 
@@ -13,26 +13,25 @@ const school: School = {
 };
 
 describe('SchoolCard', () => {
-  it('mostra nome, endereço e total de turmas', async () => {
-    await render(<SchoolCard school={school} onPress={jest.fn()} />);
+  it('mostra nome, endereço e total de turmas', () => {
+    render(<SchoolCard school={school} onPress={jest.fn()} />);
 
     expect(screen.getByText('EMEF Central')).toBeOnTheScreen();
     expect(screen.getByText('Rua A, 10 - Centro')).toBeOnTheScreen();
     expect(screen.getByText('2 turmas')).toBeOnTheScreen();
   });
 
-  it('usa singular quando há apenas uma turma', async () => {
-    await render(<SchoolCard school={{ ...school, classesCount: 1 }} onPress={jest.fn()} />);
+  it('usa singular quando há apenas uma turma', () => {
+    render(<SchoolCard school={{ ...school, classesCount: 1 }} onPress={jest.fn()} />);
 
     expect(screen.getByText('1 turma')).toBeOnTheScreen();
   });
 
-  it('dispara onPress ao tocar no card', async () => {
+  it('dispara onPress ao tocar no card', () => {
     const onPress = jest.fn();
-    const user = userEvent.setup();
 
-    await render(<SchoolCard school={school} onPress={onPress} />);
-    await user.press(screen.getByLabelText('Abrir escola EMEF Central'));
+    render(<SchoolCard school={school} onPress={onPress} />);
+    fireEvent.press(screen.getByLabelText('Abrir escola EMEF Central'));
 
     expect(onPress).toHaveBeenCalledTimes(1);
   });

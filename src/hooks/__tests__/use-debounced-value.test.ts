@@ -11,41 +11,41 @@ describe('useDebouncedValue', () => {
     jest.useRealTimers();
   });
 
-  it('só propaga o valor depois do intervalo', async () => {
-    const { result, rerender } = await renderHook<string, { value: string }>(
-      ({ value }) => useDebouncedValue(value, 300),
+  it('só propaga o valor depois do intervalo', () => {
+    const { result, rerender } = renderHook(
+      ({ value }: { value: string }) => useDebouncedValue(value, 300),
       { initialProps: { value: 'a' } },
     );
 
-    await rerender({ value: 'ab' });
+    rerender({ value: 'ab' });
     expect(result.current).toBe('a');
 
-    await act(async () => {
+    act(() => {
       jest.advanceTimersByTime(300);
     });
 
     expect(result.current).toBe('ab');
   });
 
-  it('reinicia o timer a cada mudança', async () => {
-    const { result, rerender } = await renderHook<string, { value: string }>(
-      ({ value }) => useDebouncedValue(value, 300),
+  it('reinicia o timer a cada mudança', () => {
+    const { result, rerender } = renderHook(
+      ({ value }: { value: string }) => useDebouncedValue(value, 300),
       { initialProps: { value: 'a' } },
     );
 
-    await rerender({ value: 'ab' });
-    await act(async () => {
+    rerender({ value: 'ab' });
+    act(() => {
       jest.advanceTimersByTime(200);
     });
 
-    await rerender({ value: 'abc' });
-    await act(async () => {
+    rerender({ value: 'abc' });
+    act(() => {
       jest.advanceTimersByTime(200);
     });
 
     expect(result.current).toBe('a');
 
-    await act(async () => {
+    act(() => {
       jest.advanceTimersByTime(100);
     });
 

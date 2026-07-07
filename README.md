@@ -8,23 +8,23 @@ O back-end é simulado com MirageJS rodando dentro do próprio app, com persist�
 
 | Ferramenta | Versão |
 | --- | --- |
-| Node | >= 22.13 |
-| Expo SDK | 57 |
-| React Native | 0.86 |
-| React | 19.2 (React Compiler habilitado) |
-| TypeScript | 6.0 (strict) |
-| Expo Router | 57 (typed routes) |
+| Node | >= 20.19 |
+| Expo SDK | 54 |
+| React Native | 0.81 |
+| React | 19.1 (React Compiler habilitado) |
+| TypeScript | 5.9 (strict) |
+| Expo Router | 6 (typed routes) |
 | gluestack-ui | v5 (UniWind / Tailwind CSS v4) |
 | TanStack Query | 5 |
 | Zustand | 5 |
 | MirageJS | 0.1 |
 | React Hook Form + Zod | 7 / 4 |
 | FlashList | 2 |
-| Jest (jest-expo) + Testing Library | 29 / 14 |
+| Jest (jest-expo) + Testing Library | 29 / 13 |
 
 ## Como rodar
 
-Pré-requisitos: Node 22.13+ (`nvm use 22`) e npm.
+Pré-requisitos: Node 20.19+ e npm (desenvolvido com Node 22 via `nvm use 22`).
 
 ```bash
 npm install
@@ -36,7 +36,7 @@ Com o servidor de desenvolvimento aberto:
 - **i** abre o simulador iOS (macOS com Xcode)
 - **a** abre o emulador Android
 - **w** abre no navegador
-- ou escaneie o QR code com o Expo Go (é preciso a versão compatível com SDK 57)
+- ou escaneie o QR code com o app **Expo Go** (App Store / Play Store) — o SDK 54 é compatível com a versão pública do Expo Go
 
 ### Mock de back-end
 
