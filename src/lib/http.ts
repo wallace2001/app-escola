@@ -1,4 +1,4 @@
-export const API_URL = 'http://api.escolas.local';
+import { API_URL } from './config';
 
 export class ApiError extends Error {
   constructor(

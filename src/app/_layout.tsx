@@ -15,6 +15,7 @@ import { Button, ButtonText } from '@/components/ui/button';
 import { GluestackUIProvider } from '@/components/ui/gluestack-ui-provider';
 import { Heading } from '@/components/ui/heading';
 import { Text } from '@/components/ui/text';
+import { USE_MOCK_API } from '@/lib/config';
 import { navigationThemes } from '@/lib/navigation-theme';
 import { queryClient } from '@/lib/query-client';
 import { startMockServer } from '@/mocks/server';
@@ -29,7 +30,8 @@ export default function RootLayout() {
   useEffect(() => {
     let isMounted = true;
 
-    startMockServer()
+    const boot = USE_MOCK_API ? startMockServer() : Promise.resolve();
+    boot
       .catch(() => {})
       .finally(() => {
         if (isMounted) setIsApiReady(true);

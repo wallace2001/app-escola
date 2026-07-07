@@ -4,9 +4,8 @@ import { z } from 'zod';
 
 import { schoolSchema } from '@/domain/school';
 import { schoolClassSchema } from '@/domain/school-class';
-import { API_URL } from '@/lib/http';
+import { API_URL } from '@/lib/config';
 
-import type { DbSnapshot } from './persistence';
 import { clearSnapshot, loadSnapshot, schedulePersist } from './persistence';
 import { seeds } from './seeds';
 
@@ -58,7 +57,11 @@ export async function startMockServer(): Promise<MockServer> {
       this.urlPrefix = API_URL;
       this.timing = 350;
 
-      const persist = () => schedulePersist(() => server.db.dump() as unknown as DbSnapshot);
+      const persist = () =>
+        schedulePersist(() => ({
+          schools: [...server.db.schools],
+          classes: [...server.db.classes],
+        }));
 
       const serializeSchool = (school: { id: string | number }) => ({
         ...school,
