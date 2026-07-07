@@ -31,6 +31,7 @@ import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import { usePullToRefresh } from '@/hooks/use-pull-to-refresh';
 import { pluralize } from '@/lib/format';
 import { getErrorMessage } from '@/lib/http';
+import { useSchoolFilters } from '@/stores/school-filters';
 
 const CLASS_FILTER_OPTIONS: readonly ChipOption<Shift | 'all'>[] = [
   { value: 'all', label: 'Todos' },
@@ -42,6 +43,8 @@ export default function SchoolDetailScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const toast = useAppToast();
+
+  const clearSchoolSearch = useSchoolFilters((state) => state.clearSearch);
 
   const schoolQuery = useSchool(id);
   const school = schoolQuery.data;
@@ -69,6 +72,7 @@ export default function SchoolDetailScreen() {
       onSuccess: () => {
         setIsConfirmingSchoolDelete(false);
         toast.success('Escola excluída');
+        clearSchoolSearch();
         router.back();
       },
       onError: (error) => {
