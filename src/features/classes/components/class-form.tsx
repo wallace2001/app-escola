@@ -1,6 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
-import { z } from 'zod';
 
 import { ChipGroup } from '@/components/chip-group';
 import { Button, ButtonSpinner, ButtonText } from '@/components/ui/button';
@@ -13,25 +12,9 @@ import {
 } from '@/components/ui/form-control';
 import { Input, InputField } from '@/components/ui/input';
 import { VStack } from '@/components/ui/vstack';
-import {
-  SHIFT_OPTIONS,
-  schoolClassSchema,
-  type SchoolClassInput,
-} from '@/domain/school-class';
+import { SHIFT_OPTIONS, type SchoolClassInput } from '@/domain/school-class';
 
-// no formulário o ano é digitado como texto; a conversão para número
-// acontece no submit, depois de validado o formato
-export const classFormSchema = schoolClassSchema.extend({
-  year: z
-    .string('Informe o ano letivo')
-    .regex(/^\d{4}$/, 'Use o formato de 4 dígitos, ex.: 2026'),
-});
-
-export type ClassFormValues = z.infer<typeof classFormSchema>;
-
-export function toSchoolClassInput(values: ClassFormValues): SchoolClassInput {
-  return { ...values, year: Number(values.year) };
-}
+import { classFormSchema, toSchoolClassInput, type ClassFormValues } from '../class-form-schema';
 
 interface ClassFormProps {
   defaultValues?: SchoolClassInput;

@@ -13,7 +13,6 @@ import { seeds } from './seeds';
 type MockServer = ReturnType<typeof createServer>;
 
 declare global {
-  // eslint-disable-next-line no-var
   var __mockApiServer: MockServer | undefined;
 }
 
