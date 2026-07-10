@@ -52,13 +52,19 @@ export default function RootLayout() {
           <ThemeProvider value={navigationThemes[mode]}>
             <QueryClientProvider client={queryClient}>
               <StatusBar style="auto" />
-              <Stack>
-                <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
+              <Stack screenOptions={{ headerBackTitle: 'Voltar' }}>
+                <Stack.Screen
+                  name="(drawer)"
+                  options={{ headerShown: false, title: 'Início' }}
+                />
                 <Stack.Screen
                   name="schools/new"
                   options={{ title: 'Nova escola', presentation: 'modal' }}
                 />
-                <Stack.Screen name="schools/[id]/index" options={{ title: 'Escola' }} />
+                <Stack.Screen
+                  name="schools/[id]/index"
+                  options={{ title: 'Escola', headerBackTitle: 'Voltar' }}
+                />
                 <Stack.Screen
                   name="schools/[id]/edit"
                   options={{ title: 'Editar escola', presentation: 'modal' }}

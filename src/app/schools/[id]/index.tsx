@@ -1,6 +1,6 @@
 import { FlashList } from '@shopify/flash-list';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import { MapPin, Pencil, Plus, Trash2, Users } from 'lucide-react-native';
+import { ChevronLeft, MapPin, Pencil, Plus, Trash2, Users } from 'lucide-react-native';
 import { useState } from 'react';
 import { RefreshControl } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -18,6 +18,7 @@ import { Fab, FabIcon, FabLabel } from '@/components/ui/fab';
 import { Heading } from '@/components/ui/heading';
 import { HStack } from '@/components/ui/hstack';
 import { Icon } from '@/components/ui/icon';
+import { Pressable } from '@/components/ui/pressable';
 import { Text } from '@/components/ui/text';
 import { VStack } from '@/components/ui/vstack';
 import { SHIFT_OPTIONS, type SchoolClass, type Shift } from '@/domain/school-class';
@@ -121,6 +122,20 @@ export default function SchoolDetailScreen() {
       <Stack.Screen
         options={{
           title: school.name,
+          headerBackVisible: false,
+          headerLeft: () => (
+            <Pressable
+              onPress={() => router.back()}
+              accessibilityRole="button"
+              accessibilityLabel="Voltar"
+              className="flex-row items-center gap-0.5 px-1"
+            >
+              <Icon as={ChevronLeft} size="lg" className="text-primary" />
+              <Text size="sm" className="text-primary">
+                Voltar
+              </Text>
+            </Pressable>
+          ),
           headerRight: () => (
             <HStack className="gap-1">
               <Button
